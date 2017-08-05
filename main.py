@@ -56,6 +56,5 @@ def streamwithpyMedia():
         stream.write(din)
         data = u.read(8192)
 
-
 if __name__ == '__main__':
     main()
