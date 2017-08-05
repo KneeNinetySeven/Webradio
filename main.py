@@ -1,8 +1,10 @@
 import vlc
+"""
 from urllib2 import urlopen
 import pyaudio
 import pymedia.audio.acodec as acodec
 import pymedia.muxer as muxer
+"""
 import time
 
 
@@ -34,7 +36,7 @@ def main():
     #radio.streamwithpyMedia()
 
 
-
+"""
 class RadioPyMedia():
 
     running = False;
@@ -90,7 +92,7 @@ class RadioPyMedia():
             data = u.read(8192/2)
 
         self.running = False;
-
+"""
 if __name__ == '__main__':
     main()
 
