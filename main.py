@@ -1,60 +1,41 @@
-import vlc
-from urllib2 import urlopen
-import pyaudio
-import pymedia.audio.acodec as acodec
-import pymedia.muxer as muxer
 import time
+import thread as t
+import sys
+
+from radio import Radio
 
 
 def main():
-    print('Hello World')
-    # p = vlc.MediaPlayer('https://wdr-1live-live.icecastssl.wdr.de/wdr/1live/live/mp3/128/stream.mp3')
-    # p.play()
-    streamwithpyMedia()
-    # while pyaudio.paStreamIsNotStopped:
-    # do nothing
+    stations = ["https://wdr-1live-live.sslcast.addradio.de/wdr/1live/live/mp3/128/stream.mp3"]
+    radio = Radio(stations)
+    # try:
+    # thread = t.start_new_thread(radio.switch_to(), 0,)
+    # except:
+    # print "Radio thread could not be started"
+    radio.listen_to_station(0)
+    # time.sleep(10)
+    menue(radio)
 
 
-def streamwithpyMedia():
-    url = "http://mp3.ffh.de/radioffh/livestream.mp3"
-    url = "https://wdr-1live-live.sslcast.addradio.de/wdr/1live/live/mp3/128/stream.mp3"
+def menue(radio):
+    print "Radio running. \n>>Possible Commands:\n\t-> exit \n\t-> pause \n\t-> play\n\t-> next"
+    input = ""
+    while (input != "exit"):
+        input = input.lower()
+        if input == "pause":
+            radio.pause_station()
 
-    dm = muxer.Demuxer('mp3')
+        if input == "play":
+            radio.listen_to_station(0)
 
-    pyaud = pyaudio.PyAudio()
+        if input == "next":
+            radio.next_station()
 
-    srate = 44100
 
-    stream = pyaud.open(format=pyaud.get_format_from_width(2),
-                        channels=2,
-                        rate=srate,
-                        output=True)
+        time.sleep(0.1)
+        input = raw_input("> ")
 
-    u = urlopen(url)
-
-    data = u.read(8192)
-
-    while data:
-        # Start Decode using pymedia
-        dec = None
-        s = " "
-        sinal = []
-        while len(s):
-            s = data
-            if len(s):
-                frames = dm.parse(s)
-                for fr in frames:
-                    if dec == None:
-                        # Open decoder
-                        dec = acodec.Decoder(dm.streams[0])
-                    r = dec.decode(fr[1])
-                    if r and r.data:
-                        din = r.data;
-                s = ""
-        # decode ended
-
-        stream.write(din)
-        data = u.read(8192)
+    radio.stop_listening()
 
 if __name__ == '__main__':
     main()
