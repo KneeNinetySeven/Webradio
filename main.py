@@ -65,11 +65,11 @@ class RadioPyMedia():
         time.sleep(1)
 
         while data:
-            """while stream.get_write_available() < 8192:
+            while stream.get_write_available() < 8192:
                 print "Available: ", stream.get_write_available()
                 time.sleep(sleeptime)
                 sleeptime += 0.1
-            sleeptime = 0.1"""
+            sleeptime = 0.1
             # Start Decode using pymedia
             dec = None
             s = " "
@@ -89,7 +89,7 @@ class RadioPyMedia():
             # decode ended
 
             stream.write(din)
-            data = u.read(8192/2)
+            data = u.read(8192/2) 
 
         self.running = False;
 """
