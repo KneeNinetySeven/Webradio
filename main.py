@@ -1,98 +1,41 @@
-import vlc
-"""
-from urllib2 import urlopen
-import pyaudio
-import pymedia.audio.acodec as acodec
-import pymedia.muxer as muxer
-"""
 import time
+import thread as t
+import sys
+
+from radio import Radio
 
 
 def main():
-    player = vlc.MediaPlayer()
-    media_list_player = vlc.MediaListPlayer()
-    media_list_player.set_media_player(player)
-
-    def cb(event):
-        print "cb:", event.type, event.u
-
-    media_list_player_event_manager = media_list_player.event_manager()
-    media_list_player_event_manager.event_attach(vlc.EventType.MediaListPlayerNextItemSet, cb)
-
-    media_list_player_event_manager = player.event_manager()
-    media_list_player_event_manager.event_attach(vlc.EventType.MediaPlayerEndReached, cb)
-    media_list_player_event_manager.event_attach(vlc.EventType.MediaPlayerMediaChanged, cb)
-
-    media_list = vlc.MediaList()
-
-    media_list.add_media("https://wdr-1live-live.sslcast.addradio.de/wdr/1live/live/mp3/128/stream.mp3")
-    media_list_player.set_media_list(media_list)
-
-    media_list_player.play()
-
-    time.sleep(10)
-
-    #radio = RadioPyMedia()
-    #radio.streamwithpyMedia()
+    stations = ["https://wdr-1live-live.sslcast.addradio.de/wdr/1live/live/mp3/128/stream.mp3"]
+    radio = Radio(stations)
+    # try:
+    # thread = t.start_new_thread(radio.switch_to(), 0,)
+    # except:
+    # print "Radio thread could not be started"
+    radio.listen_to_station(0)
+    # time.sleep(10)
+    menue(radio)
 
 
-"""
-class RadioPyMedia():
+def menue(radio):
+    print "Radio running. \n>>Possible Commands:\n\t-> exit \n\t-> pause \n\t-> play\n\t-> next"
+    input = ""
+    while (input != "exit"):
+        input = input.lower()
+        if input == "pause":
+            radio.pause_station()
 
-    running = False;
+        if input == "play":
+            radio.listen_to_station(0)
 
-    def streamwithpyMedia(self):
-        self.running = True;
-        url = "http://mp3.ffh.de/radioffh/livestream.mp3"
-        url = "http://www.bensound.org/bensound-music/bensound-dubstep.mp3"
-        url = "https://wdr-1live-live.sslcast.addradio.de/wdr/1live/live/mp3/128/stream.mp3"
+        if input == "next":
+            radio.next_station()
 
-        dm = muxer.Demuxer('mp3')
 
-        pyaud = pyaudio.PyAudio()
+        time.sleep(0.1)
+        input = raw_input("> ")
 
-        srate = 44100
+    radio.stop_listening()
 
-        stream = pyaud.open(format=pyaud.get_format_from_width(2),
-                            channels=2,
-                            rate=srate,
-                            output=True)
-        print "Latency: ", stream.get_output_latency()
-
-        u = urlopen(url)
-        sleeptime = 0.1
-        data = u.read(8192/2)
-        time.sleep(1)
-
-        while data:
-            while stream.get_write_available() < 8192:
-                print "Available: ", stream.get_write_available()
-                time.sleep(sleeptime)
-                sleeptime += 0.1
-            sleeptime = 0.1
-            # Start Decode using pymedia
-            dec = None
-            s = " "
-            while len(s):
-                s = data
-                if len(s):
-                    frames = dm.parse(s)
-                    for fr in frames:
-                        if dec == None:
-                            # Open decoder
-                            dec = acodec.Decoder(dm.streams[0])
-                        r = dec.decode(fr[1])
-                        if r and r.data:
-                            din = r.data;
-                    s = ""
-
-            # decode ended
-
-            stream.write(din)
-            data = u.read(8192/2) 
-
-        self.running = False;
-"""
 if __name__ == '__main__':
     main()
-
