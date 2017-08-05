@@ -99,3 +99,6 @@ ENV/
 
 # mypy
 .mypy_cache/
+/pywin32-217/
+.idea/
+pywin32-217/

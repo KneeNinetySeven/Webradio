@@ -1,6 +1,5 @@
 import vlc
 
-
 class Radio:
     def __init__(self, stations):
         self._media_list_player = None
@@ -12,7 +11,7 @@ class Radio:
         if self._media_list_player is not None:
             self._media_list_player.stop()
 
-        self._prepare(self.stations[station_number])
+        self._prepare(self.stations[station_number].url)
         self.current_station = station_number
         self.play_station()
 
@@ -53,3 +52,10 @@ class Radio:
 
         media_list.add_media(url)
         self._media_list_player.set_media_list(media_list)
+
+class Station:
+
+    def __init__(self, link, name):
+        self.url = link
+        self.name = name
+
