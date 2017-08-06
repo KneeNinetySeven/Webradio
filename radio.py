@@ -1,6 +1,4 @@
 import vlc
-import io
-
 
 class Radio:
     def __init__(self, stations):
@@ -55,6 +53,7 @@ class Radio:
 
         media_list.add_media(url)
         self._media_list_player.set_media_list(media_list)
+        self.player.audio_set_volume(self.current_vol)
 
     def turn_vol_up(self):
         if self.current_vol + 10 <= 150:

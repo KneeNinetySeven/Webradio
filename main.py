@@ -10,18 +10,13 @@ def main():
                 Station("http://www.ndr.de/resources/metadaten/audio/m3u/ndr2_hh.m3u", "Ndr2"),
                 Station("https://swr-dasding-live.sslcast.addradio.de/swr/dasding/live/aac/96/stream.aac", "Das Ding")]
     radio_inst = Radio(stations)
-    # try:
-    # thread = t.start_new_thread(radio.switch_to(), 0,)
-    # except:
-    # print "Radio thread could not be started"
     radio_inst.listen_to_station(0)
-    # time.sleep(10)
     menue(radio_inst)
 
 
 def menue(radio):
-    print "Radio running. \n>>Possible Commands:\n\t-> exit \n\t-> pause \n\t-> play\n\t-> next"
-    usr_input = ""
+    print "Radio running. \n>>Possible Commands:\n\t-> exit \n\t-> pause \n\t-> play\n\t-> next \n\t->vol+ \n\t->vol- \n\setvol"
+    usr_input = raw_input("> ")
     while (usr_input != "exit"):
         usr_input = usr_input.lower()
         if usr_input == "":
