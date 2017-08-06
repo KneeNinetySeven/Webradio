@@ -21,25 +21,37 @@ def main():
 
 def menue(radio):
     print "Radio running. \n>>Possible Commands:\n\t-> exit \n\t-> pause \n\t-> play\n\t-> next"
-    input = ""
-    while (input != "exit"):
-        input = input.lower()
-        if input == "":
+    usr_input = ""
+    while (usr_input != "exit"):
+        usr_input = usr_input.lower()
+        if usr_input == "":
             print "> "
-        elif input == "pause":
+        elif usr_input == "pause":
             radio.pause_station()
-
-        elif input == "play":
+        elif usr_input == "play":
             radio.listen_to_station(0)
-
-        elif input == "next":
+        elif usr_input == "next":
             radio.next_station()
             print "Now Playing: ", radio.stations[radio.current_station].name
+        elif usr_input == "vol+":
+            radio.turn_vol_up()
+            print "Volume: ", radio.current_vol
+        elif usr_input == "vol-":
+            radio.turn_vol_down()
+            print "Volume: ", radio.current_vol
+        elif usr_input == "setvol":
+            vol = raw_input("to? ")
+            try:
+                int(vol)
+            except:
+                print 'Enter a Number pls!'
+                break
+            radio.turn_vol_to(int(vol))
         else:
             print 'Unkown command'
             time.sleep(0.1)
 
-        input = raw_input("> ")
+        usr_input = raw_input("> ")
 
     radio.stop_listening()
 

@@ -8,6 +8,7 @@ class Radio:
         self.stations = stations
         self.running = False
         self.current_station = None
+        self.current_vol = 30;
 
     def listen_to_station(self, station_number=0):
         if self._media_list_player is not None:
@@ -39,14 +40,14 @@ class Radio:
         def _cb(event):
             print "Event: ", event.type, event.u
 
-        player = vlc.MediaPlayer()
         self._media_list_player = vlc.MediaListPlayer()
-        self._media_list_player.set_media_player(player)
+        self.player = vlc.MediaPlayer()
+        self._media_list_player.set_media_player(self.player)
 
         media_list_player_event_manager = self._media_list_player.event_manager()
         media_list_player_event_manager.event_attach(vlc.EventType.MediaListPlayerNextItemSet, _cb)
 
-        media_list_player_event_manager = player.event_manager()
+        media_list_player_event_manager = self.player.event_manager()
         media_list_player_event_manager.event_attach(vlc.EventType.MediaPlayerEndReached, _cb)
         media_list_player_event_manager.event_attach(vlc.EventType.MediaPlayerMediaChanged, _cb)
 
@@ -55,16 +56,22 @@ class Radio:
         media_list.add_media(url)
         self._media_list_player.set_media_list(media_list)
 
+    def turn_vol_up(self):
+        if self.current_vol + 10 <= 150:
+            self.current_vol += 10
+            self.player.audio_set_volume(self.current_vol)
+
+    def turn_vol_down(self):
+        if self.current_vol - 10 >= 0:
+            self.current_vol -= 10
+            self.player.audio_set_volume(self.current_vol)
+
+    def turn_vol_to(self, volume):
+        if volume > 0 & volume <= 150:
+            self.player.audio_set_volume(volume)
+            self.current_vol = volume
 
 class Station:
     def __init__(self, link, name):
         self.url = link
         self.name = name
-
-class FakeSink(object):
-    def write(self, *args):
-        pass
-    def writelines(self, *args):
-        pass
-    def close(self, *args):
-        pass
