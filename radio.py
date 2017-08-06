@@ -1,4 +1,6 @@
 import vlc
+import io
+
 
 class Radio:
     def __init__(self, stations):
@@ -53,9 +55,16 @@ class Radio:
         media_list.add_media(url)
         self._media_list_player.set_media_list(media_list)
 
-class Station:
 
+class Station:
     def __init__(self, link, name):
         self.url = link
         self.name = name
 
+class FakeSink(object):
+    def write(self, *args):
+        pass
+    def writelines(self, *args):
+        pass
+    def close(self, *args):
+        pass

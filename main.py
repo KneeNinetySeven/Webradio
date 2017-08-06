@@ -9,14 +9,14 @@ def main():
     stations = [Station("https://wdr-1live-live.sslcast.addradio.de/wdr/1live/live/mp3/128/stream.mp3", "1Live"),
                 Station("http://www.ndr.de/resources/metadaten/audio/m3u/ndr2_hh.m3u", "Ndr2"),
                 Station("https://swr-dasding-live.sslcast.addradio.de/swr/dasding/live/aac/96/stream.aac", "Das Ding")]
-    radio = Radio(stations)
+    radio_inst = Radio(stations)
     # try:
     # thread = t.start_new_thread(radio.switch_to(), 0,)
     # except:
     # print "Radio thread could not be started"
-    radio.listen_to_station(0)
+    radio_inst.listen_to_station(0)
     # time.sleep(10)
-    menue(radio)
+    menue(radio_inst)
 
 
 def menue(radio):
